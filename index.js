@@ -11,6 +11,7 @@ var io = require("socket.io")(server);
 app.use(express.json());
 
 var i = 0;
+var tokens = [];
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
@@ -45,12 +46,16 @@ io.on('connection', (socket) => {
   
   socket.on('callDetails', (data) => {
     clintID = data;
-    roomId = generateRoomId();
+    // roomId = generateRoomId();
+    roomId = 7347;
     io.emit('showUserName', clintID, roomId);  // sending
     console.log("UserID is " + clintID + " " + roomId);
 
     var token = betaToken(roomId, clintID);
     console.log(token);
+    tokens.push(token);
+    console.log("Tokens List:");
+    console.log(tokens);
   });
 
   socket.on('disconnect', () => {
