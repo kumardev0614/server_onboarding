@@ -1,5 +1,5 @@
 
-const livekitToken = require('./livekitToken');
+const {betaToken} = require('./livekitToken');
 const express = require("express");
 var http = require("http");
 const app = express();
@@ -49,7 +49,7 @@ io.on('connection', (socket) => {
     io.emit('showUserName', clintID, roomId);  // sending
     console.log("UserID is " + clintID + " " + roomId);
 
-    var token = betaToken()
+    var token = betaToken(roomId, clintID);
     console.log(token);
   });
 

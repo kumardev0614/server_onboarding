@@ -11,4 +11,4 @@ async function betaToken(roomName, participantName) {
     const token = at.toJwt();
     return token
 }
-module.exports = { livekitToken };
+module.exports = { betaToken };
