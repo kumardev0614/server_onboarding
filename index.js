@@ -7,15 +7,20 @@ const port = process.env.PORT || 3000;
 var server = http.createServer(app);
 var io = require("socket.io")(server);
 
-
 app.use(express.json());
 
+
 var i = 0;
-var tokens = [];
+// var tokens = [];
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
+
+// var token = betaToken("myroom448", "DevendraBharti");
+//     // tokens.push(token);
+//     console.log(token);
+
 
 //----------------Connection msg---------------------
 io.on('connection', (socket) => {
@@ -23,18 +28,13 @@ io.on('connection', (socket) => {
   console.log("------------------------------------------");
   console.log('Socket ID = ', socket.id);
   console.log('user connected');
-
   const count = io.engine.clientsCount;
-  
   console.log("count is = " + count)
 
-  //sending, event = chat message
   socket.emit('chat message', "user " + count + " connected");
-
-
   socket.on('chat message', (msg) => {
-    // io.emit('chat message', msg);  // sending
-    socket.broadcast.emit('chat message', msg);  // sending
+    io.emit('chat message', msg);
+    // socket.broadcast.emit('chat message', msg);  // sending
     console.log("The msg is: " + msg);
   });
 
@@ -44,32 +44,34 @@ io.on('connection', (socket) => {
     console.log("sum = " + sum);
   });
   
-  socket.on('callDetails', (data) => {
+  // ------------------ call ---------------------------
+  
+  socket.on('call', async (data) => {
     clintID = data;
     // roomId = generateRoomId();
-    roomId = 7347;
-    io.emit('showUserName', clintID, roomId);  // sending
+    roomId = "7347";
     console.log("UserID is " + clintID + " " + roomId);
 
-    var token = betaToken(roomId, clintID);
+    // generating tokens
+    var token = await betaToken(roomId, clintID);
+    // tokens.push(token);
     console.log(token);
-    tokens.push(token);
-    console.log("Tokens List:");
-    console.log(tokens);
+  
+    io.emit('receiveToken', token);  // sending
   });
 
+
+  //---------------------------------------------------
+
   socket.on('disconnect', () => {
-    console.log('user disconnected');
-    var count2 = io.engine.clientsCount;
-    console.log("count2 is  = " + count2)
-    socket.broadcast.emit('chat message', "user " + count + " disconnected " + count2 + " left");
-  });
+    console.log('-------- user disconnected -----------');
+    });
 });
-//---------------------------------------------------
+
 function generateRoomId() {
   return Math.floor(1000 + Math.random() * 9000);
 }
 
 server.listen(3000, () => {
   console.log('listening on *:3000');
-}); 
+});  

@@ -3,7 +3,7 @@ const AccessToken = livekitApi.AccessToken;
 
 
 async function betaToken(roomName, participantName) {
-    const at = new AccessToken('APIVDYiAJUFZHPF', 'bV6h9UQHzpGbb8hqCHOseKYS9WaUCbNyeNGwefncxsNA', {
+    const at = new AccessToken('APIivisjvnBSpea', 'NwF9luIhxy6NuEiBGpGC4RlReu30v1KFPnLKuayIOOa', {
         identity: participantName.toString(),
     });
     at.addGrant({ roomJoin: true, room: roomName });
