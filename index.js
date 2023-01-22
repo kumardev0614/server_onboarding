@@ -17,8 +17,7 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-// var token = betaToken("myroom448", "DevendraBharti");
-//     // tokens.push(token);
+// var token = betaToken("15555", "2000");
 //     console.log(token);
 
 
@@ -33,8 +32,7 @@ io.on('connection', (socket) => {
 
   socket.emit('chat message', "user " + count + " connected");
   socket.on('chat message', (msg) => {
-    io.emit('chat message', msg);
-    // socket.broadcast.emit('chat message', msg);  // sending
+    socket.broadcast.emit('chat message', msg);  // sending
     console.log("The msg is: " + msg);
   });
 
@@ -45,19 +43,16 @@ io.on('connection', (socket) => {
   });
   
   // ------------------ call ---------------------------
-  
-  socket.on('call', async (data) => {
-    clintID = data;
-    // roomId = generateRoomId();
-    roomId = "7347";
-    console.log("UserID is " + clintID + " " + roomId);
 
-    // generating tokens
+  socket.on('call', async (data) => {
+   let clintID = data;
+
+    roomId = "OyoRoom";
+
+    console.log("roomID: " + roomId + " clientID: " + clintID);
     var token = await betaToken(roomId, clintID);
-    // tokens.push(token);
     console.log(token);
-  
-    io.emit('receiveToken', token);  // sending
+    socket.emit('receiveToken', token);  // sending
   });
 
 
@@ -68,9 +63,9 @@ io.on('connection', (socket) => {
     });
 });
 
-function generateRoomId() {
-  return Math.floor(1000 + Math.random() * 9000);
-}
+// function generateRoomId() {
+//   return Math.floor(1000 + Math.random() * 9000);
+// }
 
 server.listen(3000, () => {
   console.log('listening on *:3000');
