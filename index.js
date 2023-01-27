@@ -1,141 +1,16 @@
-
 const {betaToken} = require('./livekitToken');
-const express = require("express");
-var http = require("http");
+
+
+const express = require('express');
 const app = express();
-const port = process.env.PORT || 3000;
-var server = http.createServer(app);
-var io = require("socket.io")(server);
 
-app.use(express.json());
+app.get('/',async (req, res) => {
+  const participantName = req.query.id;
 
-
-var i = 0;
-var users = [];
-
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  let token = await betaToken("testRoom", participantName);
+  res.send(token);
 });
 
-// var token = betaToken("15555", "2000");
-//     console.log(token);
-
-
-//----------------Connection msg---------------------
-io.on('connection', (socket) => {
-  i = i + 1;
-  console.log("------------------------------------------");
-  console.log('user connected');
-  console.log('Socket ID = ', socket.id);
-  const count = io.engine.clientsCount;
-  console.log("count is = " + count)
-  
-  
-  users.push(socket.id);
-  console.log("users:");
-  console.log(users);
-
-
-  socket.emit('chat message', "user " + count + " connected");
-  socket.on('chat message', (msg) => {
-    socket.broadcast.emit('chat message', msg);  // sending
-    console.log("The msg is: " + msg);
-  });
-
-  socket.on('addValue', (data) => {
-    var sum = data + data;
-    socket.emit('showValue', sum);  // sending
-    console.log("sum = " + sum);
-  });
-  
-  // ----------- select 2 random socket IDs ------------
-
-  // if (users.length > 4){
-  //   function selectTwoRandomElements(arr) {
-  //   let user1 = arr.shift();
-  //   let user2 = arr.shift();
-
-  //   return [user1, user2];
-  //   }
-
-  //   twoUsers = selectTwoRandomElements(users);
-  //   console.log("twoUsers");
-  //   console.log(twoUsers);
-  //   console.log("Total Users");
-  //   console.log(users);
-
-  //   connectTwoUsers(twoUsers);
-  // }
-
-  // // generate tokens for 2 randomly selected users------
-  // async function connectTwoUsers (twoUsers) {
-  //   myRoomId = generateRoomId().toString();
-  //   console.log("myRoomId: " + myRoomId + " user1: " + twoUsers[0] + " user2: " + twoUsers[1]);
-  //   token1 = await betaToken(myRoomId, twoUsers[0]),
-  //   token2 = await betaToken(myRoomId, twoUsers[1]),
-
-  //   socket.to(twoUsers[0]).emit('chat message', token1);
-  //   console.log("token1");
-  //   console.log(token1);
-  //   socket.to(twoUsers[1]).emit('chat message', token2);
-  //   console.log("token2");
-  //   console.log(token2);
-  // }
-
-  // ------------ Random Call -----------------------
-
-  socket.on('randomCall', async () => {
-    if (users.length > 1){
-      console.log("----------- random Call -----------");
-      let user1 = users.shift();
-      let user2 = users.shift();
-      
-      console.log("Total Users");
-      console.log(users);
-  
-      myRoomId = generateRoomId().toString();
-      console.log("myRoomId: " + myRoomId + " user1: " + user1 + " user2: " + user2);
-      token1 = await betaToken(myRoomId, user1),
-      token2 = await betaToken(myRoomId, user2),
-
-      io.to(user1).emit('receiveRandomToken', token1);
-      console.log("token1");
-      console.log(token1);
-      io.to(user2).emit('receiveRandomToken', token2);
-      console.log("token2"); 
-      console.log(token2);
-      console.log("----------- random Call ended-----------");
-    } else {
-      console.log("Total Users are < 4")
-    }
-   });
-
-  // ----------------- Fixed call --------------------------
-
-  socket.on('call', async (data) => {
-   let clintID = data;
-
-    roomId = "hello";
-
-    console.log("roomID: " + roomId + " clientID: " + clintID);
-    var token = await betaToken(roomId, clintID);
-    console.log(token);
-    socket.emit('receiveFixedToken', token);  // sending
-  });
-
-
-  //---------------------------------------------------
-
-  socket.on('disconnect', () => {
-    users.pop(socket.id);
-    console.log('-------- user disconnected -----------');
-    });
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
 });
-
-function generateRoomId() {
-  return Math.floor(1000 + Math.random() * 9000);
-}
-
-server.listen(3000, () => {
-  console.log('listening on *:3000');
-});  
