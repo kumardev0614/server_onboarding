@@ -11,6 +11,11 @@ app.get('/',async (req, res) => {
   res.send(token);
 });
 
+app.get('/hello',async (req, res) => {
+ 
+  res.send("han g");
+});
+
 app.listen(3000, () => {
   console.log('Server running on port 3000');
 });
