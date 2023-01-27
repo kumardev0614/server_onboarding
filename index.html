@@ -42,7 +42,7 @@
         window.scrollTo(0, document.body.scrollHeight);
       });
 
-      socket.on('showUserName', function(msg) {
+      socket.on('receiveRandomToken', function(msg) {
         var item = document.createElement('li');
         item.textContent = msg;
         messages.appendChild(item);

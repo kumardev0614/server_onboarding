@@ -1,0 +1,9 @@
+// let originalLength = arr.length;
+    // let firstIndex = Math.floor(Math.random() * arr.length);
+    // let secondIndex = Math.floor(Math.random() * (originalLength - 1));
+    // if (secondIndex >= firstIndex) {
+    //   secondIndex++;
+    // }
+    // let firstRandomElement = arr.splice(firstIndex, 1)[0];
+    // let secondRandomElement = arr[secondIndex];
+    // return [firstRandomElement, secondRandomElement];
