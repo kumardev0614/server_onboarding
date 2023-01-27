@@ -12,7 +12,7 @@ app.get('/',async (req, res) => {
 });
 
 app.get('/hello',async (req, res) => {
- 
+ console.log("working");
   res.send("han g");
 });
 
