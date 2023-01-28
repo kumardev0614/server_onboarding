@@ -12,6 +12,8 @@ console.log('Dev server is started');
 
 app.get('/',async (req, res) => {
   console.log('Dev server is running');
+
+  res.end("ok");
 });
 
 io.on('connection', (socket) => {
