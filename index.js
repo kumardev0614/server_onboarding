@@ -1,21 +1,28 @@
 const {betaToken} = require('./livekitToken');
-
-
-const express = require('express');
+const express = require("express");
+var http = require("http");
 const app = express();
+const port = process.env.PORT || 3000;
+var server = http.createServer(app);
+var io = require("socket.io")(server);
 
-app.get('/',async (req, res) => {
-  const participantName = req.query.id;
+app.use(express.json());
 
-  let token = await betaToken("testRoom", participantName);
-  res.send(token);
+io.on('connection', (socket) => {
+
+  socket.on('connect', () => {
+    console.log('-------- User Connected -----------');
+  });
+
+  socket.on('disconnect', () => {
+    console.log('-------- User Disconnected -----------');
+    });
 });
 
-app.get('/hello',async (req, res) => {
- console.log("working");
-  res.send("han g");
-});
+function generateRoomId() {
+  return Math.floor(1000 + Math.random() * 9000);
+}
 
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
+server.listen(3000, () => {
+  console.log('listening on *:3000');
+});  
