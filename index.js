@@ -8,6 +8,8 @@ var io = require("socket.io")(server);
 
 app.use(express.json());
 
+console.log('Dev server is running');
+
 io.on('connection', (socket) => {
 
   socket.on('connect', () => {
