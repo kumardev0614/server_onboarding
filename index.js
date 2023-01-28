@@ -20,6 +20,10 @@ io.on('connection', (socket) => {
 
   console.log('-------- User Connected -----------');
 
+  socket.on("userWantToConnect", () => {
+    console.log("User want to connect triggered!!!");
+  });
+
   socket.on('disconnect', () => {
     console.log('-------- User Disconnected -----------');
     });
