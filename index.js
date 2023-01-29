@@ -36,7 +36,7 @@ io.on('connection', (socket) => {
   console.log('--- User ' + socket.id.toString() + ' Connected ---');
 
   socket.on("userWantToConnect", async (myID) => {
-    console.log(data + " User want to connect triggered!!!");
+    console.log(" User want to connect triggered!!!");
 
     await callrequest(myID);
 
