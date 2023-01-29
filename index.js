@@ -35,25 +35,10 @@ io.on('connection', (socket) => {
   users.push(socket.id);
   console.log('--- User ' + socket.id.toString() + ' Connected ---');
 
-  socket.on("userWantToConnect", (data) => {
+  socket.on("userWantToConnect", async (myID) => {
     console.log(data + " User want to connect triggered!!!");
 
-    if (mylist.length > 0){
-      console.log("length > 0 triggered");
-      userAindex = pickRandomUser();
-      console.log("user index is: " + userAindex);
-      userAid = mylist[userAindex];
-      console.log("User A id is: " + userAid);
-      mylist.splice(userAindex, 1);
-      console.log(mylist);
-      io.to(userAid).emit("callRequest", socket.id);
-    } else 
-    if (mylist.length == 0){
-      console.log("length: " + mylist.length.toString());
-      mylist.push(socket.id);
-      console.log(mylist);
-      console.log("length is: " + mylist.length.toString());
-    }
+    await callrequest(myID);
 
     console.log("myList");
     console.log(mylist);
@@ -75,6 +60,7 @@ io.on('connection', (socket) => {
   socket.on('rejected', (id_b) => {
     console.log("rejected is triggred");
     // io.to(id_b).emit("rejectedCallAgain");
+    callrequest(id_b);
     });
 
   socket.on('disconnect', () => {
@@ -92,6 +78,25 @@ function pickRandomUser(){
 
 function generateRoomId() {
   return (Math.floor(1000 + Math.random() * 9000)).toString();
+}
+
+async function callrequest(myID){
+  if (mylist.length > 0){
+    console.log("length > 0 triggered");
+    userAindex = pickRandomUser();
+    console.log("user index is: " + userAindex);
+    userAid = mylist[userAindex];
+    console.log("User A id is: " + userAid);
+    mylist.splice(userAindex, 1);
+    console.log(mylist);
+    io.to(userAid).emit("callRequest", myID);
+  } else 
+  if (mylist.length == 0){
+    console.log("length: " + mylist.length.toString());
+    mylist.push(myID);
+    console.log(mylist);
+    console.log("length is: " + mylist.length.toString());
+  }
 }
 
 server.listen(3000, () => {
