@@ -36,6 +36,7 @@ io.on('connection', (socket) => {
   console.log('--- User ' + socket.id.toString() + ' Connected ---');
 
   socket.on("userWantToConnect", async (myID) => {
+    console.log("------------------------------------")
     console.log(" User want to connect triggered!!!");
 
     await callrequest(myID);
@@ -71,7 +72,7 @@ io.on('connection', (socket) => {
     } else {
       console.log("UserID Not found!!!");
     }
-    console.log('-------- Call Disconnected Before Connection -----------');
+    console.log('----- Call Disconnected Before Connection ------');
     });
 
   socket.on('disconnect', () => {
