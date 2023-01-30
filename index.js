@@ -63,6 +63,17 @@ io.on('connection', (socket) => {
     callrequest(id_b);
     });
 
+  socket.on('disconnectBeforeCall', (myId) => {
+    console.log("disconnectBeforeCall is triggred")
+    var index = array.indexOf(myId);
+    if (index !== -1) {
+      array.splice(index, 1);
+    } else {
+      console.log("UserID Not found!!!");
+    }
+    console.log('-------- Call Disconnected Before Connection -----------');
+    });
+
   socket.on('disconnect', () => {
     console.log('-------- User Disconnected -----------');
     });
