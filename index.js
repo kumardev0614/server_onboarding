@@ -38,9 +38,7 @@ io.on('connection', (socket) => {
   socket.on("userWantToConnect", async (myID) => {
     console.log("------------------------------------")
     console.log(" User want to connect triggered!!!");
-
     await callrequest(myID);
-
     console.log("myList");
     console.log(mylist);
   });
@@ -69,10 +67,12 @@ io.on('connection', (socket) => {
     var index = array.indexOf(myId);
     if (index !== -1) {
       array.splice(index, 1);
+      console.log('----- Call Disconnected Before Connection ------');
     } else {
       console.log("UserID Not found!!!");
     }
-    console.log('----- Call Disconnected Before Connection ------');
+    console.log("myList");
+    console.log(mylist);
     });
 
   socket.on('disconnect', () => {
